@@ -1,0 +1,894 @@
+
+
+<Window x:Class="Muhafiz.Agent.WPF.UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:Muhafiz.Agent.WPF.UI.ViewModels"
+        xmlns:converters="clr-namespace:Muhafiz.Agent.WPF.UI.Converters"
+        mc:Ignorable="d"
+        Title="Muhafiz.Agent Ayar Yöneticisi" Height="750" Width="1100"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent" WindowStartupLocation="CenterScreen">
+
+    <Window.DataContext>
+        <viewModels:MainViewModel/>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        <converters:ReasonToBrushConverter x:Key="ReasonToBrushConv"/>
+        <!-- Renk Paleti -->
+        <SolidColorBrush x:Key="AccentColorBrush" Color="#007ACC" />
+        <SolidColorBrush x:Key="AccentColorLightBrush" Color="#0099FF" />
+        <SolidColorBrush x:Key="TextColorBrush" Color="#FFFFFF" />
+        <SolidColorBrush x:Key="SubtleTextColorBrush" Color="#D0D0D0" />
+        <SolidColorBrush x:Key="BackgroundColorBrush" Color="#1E1E1E" />
+        <SolidColorBrush x:Key="PanelColorBrush" Color="#252526" />
+        <SolidColorBrush x:Key="BorderColorBrush" Color="#333333" />
+        <SolidColorBrush x:Key="TextBoxBackgroundBrush" Color="#2A2A2A"/>
+        <SolidColorBrush x:Key="MouseOverBrush" Color="#3E3E42"/>
+        <SolidColorBrush x:Key="DisabledBrush" Color="#434346"/>
+
+        <!-- Temel Kontrol Stilleri -->
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource TextColorBrush}"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="PageTitleStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource TextColorBrush}"/>
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontWeight" Value="Light"/>
+            <Setter Property="Margin" Value="0,0,0,20"/>
+        </Style>
+
+        <Style x:Key="LabelStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource TextColorBrush}"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+        </Style>
+
+        <Style TargetType="ToolTip">
+            <Setter Property="Background" Value="#3E3E42"/>
+            <Setter Property="Foreground" Value="{StaticResource TextColorBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderColorBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="MaxWidth" Value="300"/>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="{StaticResource TextBoxBackgroundBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextColorBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderColorBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="CaretBrush" Value="{StaticResource TextColorBrush}"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="4">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource AccentColorBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource AccentColorBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ComboBoxToggleButton" TargetType="ToggleButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="20" />
+                            </Grid.ColumnDefinitions>
+                            <Border x:Name="Border" Grid.ColumnSpan="2" CornerRadius="4" Background="{StaticResource TextBoxBackgroundBrush}" BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="1" />
+                            <Path x:Name="Arrow" Grid.Column="1" Opacity="0.6" Fill="{StaticResource TextColorBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" Data="M 0 0 L 4 4 L 8 0 Z"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource AccentColorBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="true">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource AccentColorBrush}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ComboBox Stili -->
+        <Style TargetType="{x:Type ComboBox}">
+            <Setter Property="Background" Value="{StaticResource TextBoxBackgroundBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextColorBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderColorBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <ToggleButton x:Name="ToggleButton" Focusable="false" IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Style="{StaticResource ComboBoxToggleButton}"/>
+                            <ContentPresenter x:Name="ContentSite" IsHitTestVisible="False" Content="{TemplateBinding SelectionBoxItem}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" Margin="8,8,23,8" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                            <Popup x:Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" AllowsTransparency="True" Focusable="False" PopupAnimation="Slide">
+                                <Grid x:Name="DropDown" SnapsToDevicePixels="True" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                    <Border x:Name="DropDownBorder" Background="{StaticResource PanelColorBrush}" BorderThickness="1" BorderBrush="{StaticResource BorderColorBrush}"/>
+                                    <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
+                                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                    </ScrollViewer>
+                                </Grid>
+                            </Popup>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="ComboBoxItem">
+            <Setter Property="Foreground" Value="{StaticResource TextColorBrush}"/>
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBoxItem">
+                        <Border x:Name="Border" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True" Background="Transparent">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsHighlighted" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="{StaticResource AccentColorBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ToggleSwitch Stili -->
+        <Style TargetType="{x:Type CheckBox}" x:Key="ToggleSwitchStyle">
+            <Setter Property="Foreground" Value="{StaticResource TextColorBrush}"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type CheckBox}">
+                        <StackPanel Orientation="Horizontal">
+                            <ContentPresenter VerticalAlignment="Center"/>
+                            <Grid VerticalAlignment="Center" Margin="10,0,0,0">
+                                <Border x:Name="BackgroundBorder" CornerRadius="12" Width="44" Height="24" Background="{StaticResource DisabledBrush}"/>
+                                <Border x:Name="Thumb" CornerRadius="9" Width="18" Height="18" Background="White" HorizontalAlignment="Left" Margin="3,0,0,0"/>
+                            </Grid>
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="BackgroundBorder" Property="Background" Value="{StaticResource AccentColorBrush}"/>
+                                <Setter TargetName="Thumb" Property="HorizontalAlignment" Value="Right"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="GroupBox">
+            <Setter Property="Foreground" Value="{StaticResource AccentColorBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderColorBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="15"/>
+            <Setter Property="Margin" Value="0,20,0,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="GroupBox">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0,0,0,1" Padding="0,0,0,10">
+                                <TextBlock Text="{TemplateBinding Header}" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource TextColorBrush}"/>
+                            </Border>
+                            <ContentPresenter Grid.Row="1" Margin="0,10,0,0"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Navigasyon Buton Stili -->
+        <Style TargetType="RadioButton" x:Key="NavButtonStyle">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource SubtleTextColorBrush}"/>
+            <Setter Property="Padding" Value="15"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="BorderThickness" Value="4,0,0,0"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource MouseOverBrush}"/>
+                    <Setter Property="Foreground" Value="{StaticResource TextColorBrush}"/>
+                </Trigger>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Foreground" Value="{StaticResource AccentColorBrush}"/>
+                    <Setter Property="BorderBrush" Value="{StaticResource AccentColorBrush}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Ana Eylem Buton Stili (Kaydet) -->
+        <Style TargetType="Button" x:Key="PrimaryActionButtonStyle">
+            <Setter Property="Background" Value="{StaticResource AccentColorBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="20,12"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="4">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE74E;" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <ContentPresenter/>
+                            </StackPanel>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="{StaticResource AccentColorLightBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="{StaticResource DisabledBrush}"/>
+                                <Setter Property="Foreground" Value="#8E8E8E"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- İkon Buton Stili (+/-) -->
+        <Style TargetType="Button" x:Key="IconButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource SubtleTextColorBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderColorBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Width" Value="32"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="{StaticResource MouseOverBrush}"/>
+                                <Setter Property="Foreground" Value="{StaticResource TextColorBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Tablo ve Sekme Stilleri -->
+        <Style TargetType="TabControl" x:Key="IocTabControlStyle">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabControl">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TabPanel Grid.Row="0" IsItemsHost="True" Background="Transparent"/>
+                            <Border Grid.Row="1" Background="{StaticResource PanelColorBrush}" CornerRadius="5" Padding="20" Margin="0,15,0,0">
+                                <ContentPresenter ContentSource="SelectedContent"/>
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="TabItem" x:Key="IocTabItemStyle">
+            <Setter Property="Foreground" Value="{StaticResource SubtleTextColorBrush}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Padding" Value="15,10"/>
+            <Setter Property="Margin" Value="0,0,5,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="Transparent" 
+                                BorderThickness="0" 
+                                CornerRadius="5,5,0,0"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter ContentSource="Header" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Foreground" Value="{StaticResource TextColorBrush}"/>
+                    <Setter Property="Background" Value="{StaticResource PanelColorBrush}"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="{StaticResource TextColorBrush}"/>
+                    <Setter Property="Background" Value="{StaticResource MouseOverBrush}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- DataGrid Modern Style Set -->
+        <Style TargetType="DataGridCell">
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        </Style>
+
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource SubtleTextColorBrush}"/>
+            <Setter Property="Padding" Value="10,12"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderColorBrush}"/>
+            <Setter Property="BorderThickness" Value="0,0,0,2"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        </Style>
+
+        <Style TargetType="DataGridRow">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource MouseOverBrush}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="DataGrid">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource TextColorBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderColorBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="RowDetailsVisibilityMode" Value="VisibleWhenSelected"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="CanUserDeleteRows" Value="False"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="GridLinesVisibility" Value="None"/>
+        </Style>
+
+    </Window.Resources>
+
+    <Border Background="{StaticResource BackgroundColorBrush}" CornerRadius="10" MouseDown="Border_MouseDown">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Başlık Çubuğu -->
+            <TextBlock Text="Muhafiz.Agent Ayar Yöneticisi" Foreground="{StaticResource TextColorBrush}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14" FontWeight="SemiBold"/>
+            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <Button Content="&#xE921;" FontFamily="Segoe MDL2 Assets" Width="40" Height="40" Background="Transparent" BorderThickness="0" Foreground="{StaticResource TextColorBrush}" Click="Minimize_Click"/>
+                <Button Content="&#xE8BB;" FontFamily="Segoe MDL2 Assets" Width="40" Height="40" Background="Transparent" BorderThickness="0" Foreground="{StaticResource TextColorBrush}" Click="Close_Click"/>
+            </StackPanel>
+
+            <!-- Ana İçerik -->
+            <Grid Grid.Row="1" Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="240"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Sol Navigasyon -->
+                <Border Grid.Column="0" Background="{StaticResource PanelColorBrush}" CornerRadius="0,8,8,0">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="0,20,0,20">
+                            <RadioButton Style="{StaticResource NavButtonStyle}" IsChecked="True" Command="{Binding NavigateCommand}" CommandParameter="Genel">
+                                <StackPanel Orientation="Horizontal"><TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE713;" Margin="0,0,15,0"/><TextBlock Text="Genel"/></StackPanel>
+                            </RadioButton>
+                            <RadioButton Style="{StaticResource NavButtonStyle}" Command="{Binding NavigateCommand}" CommandParameter="Agent">
+                                <StackPanel Orientation="Horizontal"><TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE781;" Margin="0,0,15,0"/><TextBlock Text="Agent"/></StackPanel>
+                            </RadioButton>
+                            <RadioButton Style="{StaticResource NavButtonStyle}" Command="{Binding NavigateCommand}" CommandParameter="Ioc">
+                                <StackPanel Orientation="Horizontal"><TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE728;" Margin="0,0,15,0"/><TextBlock Text="IOC"/></StackPanel>
+                            </RadioButton>
+                            <RadioButton Style="{StaticResource NavButtonStyle}" Command="{Binding NavigateCommand}" CommandParameter="Yara">
+                                <StackPanel Orientation="Horizontal"><TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE721;" Margin="0,0,15,0"/><TextBlock Text="YARA"/></StackPanel>
+                            </RadioButton>
+                            <RadioButton Style="{StaticResource NavButtonStyle}" Command="{Binding NavigateCommand}" CommandParameter="Egress">
+                                <StackPanel Orientation="Horizontal"><TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE774;" Margin="0,0,15,0"/><TextBlock Text="Egress"/></StackPanel>
+                            </RadioButton>
+                            <RadioButton Style="{StaticResource NavButtonStyle}" Command="{Binding NavigateCommand}" CommandParameter="Sandbox">
+                                <StackPanel Orientation="Horizontal"><TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE7B3;" Margin="0,0,15,0"/><TextBlock Text="Sandbox"/></StackPanel>
+                            </RadioButton>
+                            <RadioButton Style="{StaticResource NavButtonStyle}" Command="{Binding NavigateCommand}" CommandParameter="Quarantine">
+                                <StackPanel Orientation="Horizontal"><TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE748;" Margin="0,0,15,0"/><TextBlock Text="Karantina"/></StackPanel>
+                            </RadioButton>
+                            <RadioButton Style="{StaticResource NavButtonStyle}" Command="{Binding NavigateCommand}" CommandParameter="ProcessKiller">
+                                <StackPanel Orientation="Horizontal"><TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE74C;" Margin="0,0,15,0"/><TextBlock Text="Process Killer"/></StackPanel>
+                            </RadioButton>
+                            <RadioButton Style="{StaticResource NavButtonStyle}" Command="{Binding NavigateCommand}" CommandParameter="Canary">
+                                <StackPanel Orientation="Horizontal"><TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8A4;" Margin="0,0,15,0"/><TextBlock Text="Canary"/></StackPanel>
+                            </RadioButton>
+                            <RadioButton Style="{StaticResource NavButtonStyle}" Command="{Binding NavigateCommand}" CommandParameter="Advanced">
+                                <StackPanel Orientation="Horizontal"><TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE727;" Margin="0,0,15,0"/><TextBlock Text="Gelişmiş Koruma"/></StackPanel>
+                            </RadioButton>
+                            <RadioButton Style="{StaticResource NavButtonStyle}" Command="{Binding NavigateCommand}" CommandParameter="Logs">
+                                <StackPanel Orientation="Horizontal"><TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE736;" Margin="0,0,15,0"/><TextBlock Text="Loglar"/></StackPanel>
+                            </RadioButton>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Border>
+
+                <!-- Sağ İçerik Alanı -->
+                <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" Margin="30">
+                    <Grid>
+                        <Grid x:Name="PnlGenel" Visibility="{Binding IsGenelPanelVisible, Converter={StaticResource BoolToVis}}">
+                            <StackPanel>
+                                <TextBlock Text="Genel Ayarlar" Style="{StaticResource PageTitleStyle}"/>
+                                <GroupBox Header="Temel Yapılandırma">
+                                    <StackPanel>
+                                        <TextBlock Text="Çalışma Modu" Style="{StaticResource LabelStyle}" ToolTip="Agent'in çalışma modunu belirler. Silent modda arayüz göstermez."/>
+                                        <ComboBox x:Name="ComboMode" SelectedIndex="0">
+                                            <ComboBoxItem Content="Silent"/>
+                                            <ComboBoxItem Content="Normal"/>
+                                        </ComboBox>
+
+                                        <TextBlock Text="İzlenecek Yollar (her satıra bir yol)" Style="{StaticResource LabelStyle}" Margin="0,15,0,8" ToolTip="Agent tarafından aktif olarak izlenecek dosya ve klasör yolları."/>
+                                        <TextBox x:Name="TxtWatchedPaths" AcceptsReturn="True" Height="100" VerticalScrollBarVisibility="Auto"/>
+
+                                        <TextBlock Text="İşlem Beyaz Listesi (her satıra bir .exe)" Style="{StaticResource LabelStyle}" Margin="0,15,0,8" ToolTip="Bu listedeki işlemler, agent tarafından yapılacak analiz ve engellemelerden muaf tutulur."/>
+                                        <TextBox x:Name="TxtProcessWhitelist" AcceptsReturn="True" Height="100" VerticalScrollBarVisibility="Auto"/>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Header="Self Protection">
+                                    <StackPanel>
+                                        <CheckBox x:Name="ChkSelfProtectionEnabled" Content="Self Protection'ı Etkinleştir" Style="{StaticResource ToggleSwitchStyle}" ToolTip="Agent'in kendi dosyalarını ve ayarlarını korumasını sağlar."/>
+                                        <TextBlock Text="Sertleştirilecek Yollar" Style="{StaticResource LabelStyle}" Margin="0,15,0,8" ToolTip="Self-protection kapsamında ek olarak korunacak dosya ve klasör yolları."/>
+                                        <TextBox x:Name="TxtHardenPaths" AcceptsReturn="True" Height="80" VerticalScrollBarVisibility="Auto"/>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Header="Update Channel">
+                                    <StackPanel>
+                                        <CheckBox x:Name="ChkUpdateChannelEnabled" Content="Otomatik Güncellemeyi Etkinleştir" Style="{StaticResource ToggleSwitchStyle}" ToolTip="Agent'in yeni güncellemeleri otomatik olarak denetlemesini sağlar."/>
+                                        <TextBlock Text="İzlenecek Yol" Style="{StaticResource LabelStyle}" Margin="0,15,0,8" ToolTip="Agent'in güncellemeleri kontrol edeceği dizin."/>
+                                        <TextBox x:Name="TxtUpdateWatchPath"/>
+                                        <TextBlock Text="Aralık (saniye)" Style="{StaticResource LabelStyle}" Margin="0,15,0,8" ToolTip="Agent'in güncellemeleri kontrol etme sıklığı (saniye cinsinden)."/>
+                                        <TextBox x:Name="TxtUpdateInterval"/>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Header="Events">
+                                    <StackPanel>
+                                        <TextBlock Text="Olayların Kaydedileceği Kök Dizin" Style="{StaticResource LabelStyle}" ToolTip="Agent tarafından oluşturulan olay kayıtlarının (loglar, raporlar vb.) saklanacağı ana klasör."/>
+                                        <TextBox x:Name="TxtEventsRoot"/>
+                                    </StackPanel>
+                                </GroupBox>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Agent Control Panel -->
+                        <Grid x:Name="PnlAgent" Visibility="{Binding IsAgentPanelVisible, Converter={StaticResource BoolToVis}}">
+                            <StackPanel>
+                                <TextBlock Text="Agent Kontrolü" Style="{StaticResource PageTitleStyle}"/>
+                                <TextBlock Text="Agent sadece bu sekme üzerinden başlatılabilir/durdurulabilir." Foreground="{StaticResource SubtleTextColorBrush}" TextWrapping="Wrap" Margin="0,0,0,20"/>
+                                <GroupBox Header="Agent Durumu">
+                                    <StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                            <TextBlock Text="Durum: " Style="{StaticResource LabelStyle}" Margin="0,0,5,0"/>
+                                            <TextBlock Text="{Binding AgentStatusText}" FontWeight="Bold" Foreground="{Binding AgentStatusColor}" VerticalAlignment="Center"/>
+                                            <Button Content="&#xE72C;" FontFamily="Segoe MDL2 Assets" Style="{StaticResource IconButton}" Width="24" Height="24" Margin="10,0,0,0" Command="{Binding RefreshAgentStatusCommand}" ToolTip="Durumu Yenile"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Content="Başlat" Style="{StaticResource PrimaryActionButtonStyle}" Padding="10,5" FontSize="12" Margin="0,0,10,0" Command="{Binding StartAgentCommand}" IsEnabled="{Binding IsStartEnabled}" ToolTip="Muhafiz Agent'ı başlatır."/>
+                                            <Button Content="Durdur" Style="{StaticResource PrimaryActionButtonStyle}" Padding="10,5" FontSize="12" Margin="0,0,10,0" Command="{Binding StopAgentCommand}" IsEnabled="{Binding IsStopEnabled}" ToolTip="Çalışan Muhafiz Agent'ı durdurur."/>
+                                            <Button Content="Yeniden Başlat" Style="{StaticResource PrimaryActionButtonStyle}" Padding="10,5" FontSize="12" Command="{Binding RestartAgentCommand}" IsEnabled="{Binding IsRestartEnabled}" ToolTip="Muhafiz Agent'ı yeniden başlatır."/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </GroupBox>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid x:Name="PnlIoc" Visibility="{Binding IsIocPanelVisible, Converter={StaticResource BoolToVis}}">
+                            <StackPanel>
+                                <TextBlock Text="IOC Yönetimi" Style="{StaticResource PageTitleStyle}"/>
+                                <TextBlock Text="Indicators of Compromise (IOC) yönetimi, bilinen kötü amaçlı yazılım hash'leri ve URL'leri gibi tehdit göstergelerini izlemenizi ve engellemenizi sağlar." Foreground="{StaticResource SubtleTextColorBrush}" TextWrapping="Wrap" Margin="0,0,0,20"/>
+                                <TabControl Style="{StaticResource IocTabControlStyle}">
+                                    <TabItem Header="Hashes" Style="{StaticResource IocTabItemStyle}">
+                                        <Grid>
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+
+                                                <!-- Input and Add/Delete Buttons -->
+                                                <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,10">
+                                                    <TextBox x:Name="TxtNewHash" Width="300" Margin="0,0,10,0" Text="{Binding NewHash, UpdateSourceTrigger=PropertyChanged}" ToolTip="Yeni hash değerini girin"/>
+                                                    <Button Content="&#xE710;" FontFamily="Segoe MDL2 Assets" Style="{StaticResource IconButton}" Margin="0,0,5,0" Command="{Binding AddHashCommand}" ToolTip="Yeni Hash Ekle"/>
+                                                    <Button Content="&#xE74D;" FontFamily="Segoe MDL2 Assets" Style="{StaticResource IconButton}" Command="{Binding DeleteHashCommand, ElementName=DgHashes, Path=SelectedItem}" ToolTip="Seçili Hash'i Sil"/>
+                                                </StackPanel>
+
+                                                <!-- Search Box -->
+                                                <TextBox x:Name="TxtSearchHashes" Grid.Row="1" Margin="0,0,0,10" Text="{Binding SearchHashesText, UpdateSourceTrigger=PropertyChanged}" ToolTip="Hash'leri filtrelemek için arama yapın"/>
+
+                                                <!-- DataGrid -->
+                                                <DataGrid x:Name="DgHashes" Grid.Row="2" Height="450" ItemsSource="{Binding Hashes}">
+                                                    <DataGrid.Columns>
+                                                        <DataGridTextColumn Header="Hash (MD5/SHA1/SHA256)" Binding="{Binding Value}" Width="*"/>
+                                                    </DataGrid.Columns>
+                                                </DataGrid>
+                                            </Grid>
+                                        </Grid>
+                                    </TabItem>
+                                    <TabItem Header="URLs" Style="{StaticResource IocTabItemStyle}">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+
+                                            <!-- Input and Add/Delete Buttons -->
+                                            <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,10">
+                                                <TextBox x:Name="TxtNewUrl" Width="300" Margin="0,0,10,0" Text="{Binding NewUrl, UpdateSourceTrigger=PropertyChanged}" ToolTip="Yeni URL değerini girin"/>
+                                                <Button Content="&#xE710;" FontFamily="Segoe MDL2 Assets" Style="{StaticResource IconButton}" Margin="0,0,5,0" Command="{Binding AddUrlCommand}" ToolTip="Yeni URL Ekle"/>
+                                                <Button Content="&#xE74D;" FontFamily="Segoe MDL2 Assets" Style="{StaticResource IconButton}" Command="{Binding DeleteUrlCommand, ElementName=DgUrls, Path=SelectedItem}" ToolTip="Seçili URL'yi Sil"/>
+                                            </StackPanel>
+
+                                            <!-- Search Box -->
+                                            <TextBox x:Name="TxtSearchUrls" Grid.Row="1" Margin="0,0,0,10" Text="{Binding SearchUrlsText, UpdateSourceTrigger=PropertyChanged}" ToolTip="URL'leri filtrelemek için arama yapın"/>
+
+                                            <!-- DataGrid -->
+                                            <DataGrid x:Name="DgUrls" Grid.Row="2" Height="450" ItemsSource="{Binding Urls}">
+                                                <DataGrid.Columns>
+                                                    <DataGridTextColumn Header="URL" Binding="{Binding Value}" Width="*"/>
+                                                </DataGrid.Columns>
+                                            </DataGrid>
+                                        </Grid>
+                                    </TabItem>
+                                </TabControl>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid x:Name="PnlYara" Visibility="{Binding IsYaraPanelVisible, Converter={StaticResource BoolToVis}}">
+                            <StackPanel>
+                                <TextBlock Text="YARA Ayarları" Style="{StaticResource PageTitleStyle}"/>
+                                <TextBlock Text="YARA kuralları, dosya içeriklerini veya çalışan süreçlerin belleğini belirli desenlere göre tarayarak kötü amaçlı yazılımları ve diğer tehditleri tespit etmenizi sağlar." Foreground="{StaticResource SubtleTextColorBrush}" TextWrapping="Wrap" Margin="0,0,0,20"/>
+                                <GroupBox Header="YARA Yapılandırması">
+                                    <StackPanel>
+                                        <CheckBox x:Name="ChkYaraEnabled" Content="YARA Taramasını Etkinleştir" Style="{StaticResource ToggleSwitchStyle}" ToolTip="Dosya ve işlemleri YARA kurallarıyla tarar."/>
+                                        <CheckBox x:Name="ChkYaraUseCli" Content="YARA Komut Satırı İstemcisini Kullan" Style="{StaticResource ToggleSwitchStyle}" Margin="0,10,0,0" ToolTip="Tarama için harici bir YARA istemcisi kullanır."/>
+                                        <TextBlock Text="YARA İstemci Yolu" Style="{StaticResource LabelStyle}" Margin="0,15,0,8" ToolTip="YARA komut satırı aracının tam yolu (örneğin, C:\yara\yara.exe)."/>
+                                        <TextBox x:Name="TxtYaraCliPath"/>
+                                        <TextBlock Text="YARA Kuralları Yolu" Style="{StaticResource LabelStyle}" Margin="0,15,0,8" ToolTip="YARA kural dosyalarının bulunduğu dizin."/>
+                                        <TextBox x:Name="TxtYaraRulesPath"/>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Header="YARA Kuralları Yönetimi">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="250"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel>
+                                            <TextBlock Text="Kurallar" Style="{StaticResource LabelStyle}"/>
+                                            <ListView x:Name="LsvYaraRules" Background="{StaticResource TextBoxBackgroundBrush}" BorderThickness="0" Margin="0,0,0,10" Height="200"/>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Button Content="Ekle" Style="{StaticResource PrimaryActionButtonStyle}" Padding="10,5" FontSize="12" Margin="0,0,5,0" ToolTip="Yeni bir YARA kuralı oluşturur."/>
+                                                <Button Content="Sil" Style="{StaticResource PrimaryActionButtonStyle}" Padding="10,5" FontSize="12" ToolTip="Seçili YARA kuralını siler."/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="1" Margin="20,0,0,0">
+                                            <TextBlock Text="Kural İçeriği" Style="{StaticResource LabelStyle}"/>
+                                            <TextBox x:Name="TxtYaraRuleContent" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Height="230" FontFamily="Consolas"/>
+                                            <Button Content="Kaydet" Style="{StaticResource PrimaryActionButtonStyle}" Margin="0,10,0,0" HorizontalAlignment="Right" ToolTip="YARA kural içeriğindeki değişiklikleri kaydeder."/>
+                                        </StackPanel>
+                                    </Grid>
+                                </GroupBox>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid x:Name="PnlEgress" Visibility="{Binding IsEgressPanelVisible, Converter={StaticResource BoolToVis}}">
+                            <StackPanel>
+                                <TextBlock Text="Egress Ayarları" Style="{StaticResource PageTitleStyle}"/>
+                                <TextBlock Text="Egress ayarları, agent'in dış ağ bağlantılarını kontrol etmesini ve şüpheli DNS sorgularını tespit etmesini sağlar." Foreground="{StaticResource SubtleTextColorBrush}" TextWrapping="Wrap" Margin="0,0,0,20"/>
+                                <GroupBox Header="Koşullu Engelleme">
+                                    <StackPanel>
+                                        <TextBlock Text="Olay Anında Engellenecek Hostlar (her satıra bir tane)" Style="{StaticResource LabelStyle}" ToolTip="Bir tehdit anında, bu listedeki hostlara yapılan giden ağ bağlantıları engellenir."/>
+                                        <TextBox x:Name="TxtEgressHosts" AcceptsReturn="True" Height="100" VerticalScrollBarVisibility="Auto"/>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Header="DNS Anomaly">
+                                    <StackPanel>
+                                        <CheckBox x:Name="ChkDnsAnomalyEnabled" Content="DNS Anomali Tespitini Etkinleştir" Style="{StaticResource ToggleSwitchStyle}" ToolTip="Normalin dışında gerçekleşen DNS sorgularını tespit eder."/>
+                                        <TextBlock Text="Aralık (saniye)" Style="{StaticResource LabelStyle}" Margin="0,15,0,8" ToolTip="DNS anomali tespiti için kontrol aralığı (saniye cinsinden)."/>
+                                        <TextBox x:Name="TxtDnsAnomalyInterval"/>
+                                    </StackPanel>
+                                </GroupBox>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid x:Name="PnlSandbox" Visibility="{Binding IsSandboxPanelVisible, Converter={StaticResource BoolToVis}}">
+                            <StackPanel>
+                                <TextBlock Text="Sandbox Ayarları" Style="{StaticResource PageTitleStyle}"/>
+                                <TextBlock Text="Sandbox ayarları, şüpheli dosyaları güvenli ve izole bir ortamda analiz etmenizi sağlar." Foreground="{StaticResource SubtleTextColorBrush}" TextWrapping="Wrap" Margin="0,0,0,20"/>
+                                <GroupBox Header="Genel Sandbox Yapılandırması">
+                                    <CheckBox x:Name="ChkSandboxEnabled" Content="Sandbox Analizini Etkinleştir" Style="{StaticResource ToggleSwitchStyle}" ToolTip="Şüpheli dosyaların güvenli bir ortamda analiz edilmesini sağlar."/>
+                                </GroupBox>
+                                <GroupBox Header="VirusTotal">
+                                    <StackPanel>
+                                        <TextBlock Text="API Anahtarı" Style="{StaticResource LabelStyle}" ToolTip="VirusTotal API anahtarınız. Dosya hash'lerini VirusTotal'da sorgulamak için kullanılır."/>
+                                        <TextBox x:Name="TxtVirusTotalApiKey"/>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Header="HybridAnalysis">
+                                    <StackPanel>
+                                        <TextBlock Text="API Anahtarı" Style="{StaticResource LabelStyle}" ToolTip="Hybrid Analysis API anahtarınız. Şüpheli dosyaları Hybrid Analysis'e göndermek için kullanılır."/>
+                                        <TextBox x:Name="TxtHybridAnalysisApiKey"/>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Header="Windows Sandbox">
+                                    <StackPanel>
+                                        <CheckBox x:Name="ChkWinSandboxEnabled" Content="Windows Sandbox Kullan" Style="{StaticResource ToggleSwitchStyle}" ToolTip="Analiz için Windows'un yerleşik Sandbox özelliğini kullanır."/>
+                                        <TextBlock Text="Zaman Aşımı (saniye)" Style="{StaticResource LabelStyle}" Margin="0,15,0,8" ToolTip="Windows Sandbox oturumunun maksimum çalışma süresi (saniye cinsinden)."/>
+                                        <TextBox x:Name="TxtWinSandboxTimeout"/>
+                                        <TextBlock Text="Bellek (MB)" Style="{StaticResource LabelStyle}" Margin="0,15,0,8" ToolTip="Windows Sandbox'a ayrılacak bellek miktarı (MB cinsinden)."/>
+                                        <TextBox x:Name="TxtWinSandboxMemory"/>
+                                        <TextBlock Text="Ağ Erişimi" Style="{StaticResource LabelStyle}" Margin="0,15,0,8" ToolTip="Windows Sandbox'ın ağ erişimini yapılandırır."/>
+                                        <ComboBox x:Name="CmbWinSandboxNetworking">
+                                            <ComboBoxItem Content="Default"/>
+                                            <ComboBoxItem Content="Disabled"/>
+                                            <ComboBoxItem Content="Enabled"/>
+                                        </ComboBox>
+                                    </StackPanel>
+                                </GroupBox>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid x:Name="PnlQuarantine" Visibility="{Binding IsQuarantinePanelVisible, Converter={StaticResource BoolToVis}}">
+                            <StackPanel>
+                                <TextBlock Text="Karantina Ayarları" Style="{StaticResource PageTitleStyle}"/>
+                                <TextBlock Text="Karantina ayarları, şüpheli veya kötü amaçlı dosyaları sistemden izole etmenizi ve güvenli bir şekilde saklamanızı sağlar." Foreground="{StaticResource SubtleTextColorBrush}" TextWrapping="Wrap" Margin="0,0,0,20"/>
+                                <GroupBox Header="Karantina Yapılandırması">
+                                    <StackPanel>
+                                        <TextBlock Text="Kök Dizin" Style="{StaticResource LabelStyle}" ToolTip="Karantinaya alınan dosyaların saklanacağı klasör."/>
+                                        <TextBox x:Name="TxtQuarantineRoot"/>
+                                        <CheckBox x:Name="ChkQuarantineEncrypt" Content="Dosyaları Şifrele" Style="{StaticResource ToggleSwitchStyle}" Margin="0,15,0,0" ToolTip="Karantinaya alınan dosyaların şifrelenerek saklanmasını sağlar."/>
+                                        <TextBlock Text="Şifrelenecek Uzantılar (her satıra bir tane)" Style="{StaticResource LabelStyle}" Margin="0,15,0,8" ToolTip="Karantinaya alınan ve şifrelenecek dosya uzantıları (örneğin, .exe, .dll)."/>
+                                        <TextBox x:Name="TxtQuarantineEncryptExtensions" AcceptsReturn="True" Height="80" VerticalScrollBarVisibility="Auto"/>
+                                        <TextBlock Text="Şifreleme Anahtarı Yolu" Style="{StaticResource LabelStyle}" Margin="0,15,0,8" ToolTip="Karantinaya alınan dosyaları şifrelemek ve çözmek için kullanılacak anahtar dosyasının yolu."/>
+                                        <TextBox x:Name="TxtQuarantineKeyPath"/>
+                                    </StackPanel>
+                                </GroupBox>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid x:Name="PnlProcessKiller" Visibility="{Binding IsProcessKillerPanelVisible, Converter={StaticResource BoolToVis}}">
+                            <StackPanel>
+                                <TextBlock Text="Process Killer Ayarları" Style="{StaticResource PageTitleStyle}"/>
+                                <TextBlock Text="Process Killer, kötü amaçlı veya istenmeyen süreçleri otomatik olarak sonlandırarak sistem güvenliğini artırır." Foreground="{StaticResource SubtleTextColorBrush}" TextWrapping="Wrap" Margin="0,0,0,20"/>
+                                <GroupBox Header="Process Killer Yapılandırması">
+                                    <StackPanel>
+                                        <CheckBox x:Name="ChkProcessKillerEnabled" Content="Process Killer'ı Etkinleştir" Style="{StaticResource ToggleSwitchStyle}" ToolTip="Zararlı olarak tespit edilen işlemleri sonlandırır."/>
+                                        <TextBlock Text="Soft Kill Zaman Aşımı (ms)" Style="{StaticResource LabelStyle}" Margin="0,15,0,8" ToolTip="İşlemi sonlandırmadan önce ne kadar süre bekleneceği."/>
+                                        <TextBox x:Name="TxtProcessKillerTimeout"/>
+                                        <CheckBox x:Name="ChkProcessKillerHardKill" Content="Hard Kill Kullan" Style="{StaticResource ToggleSwitchStyle}" Margin="0,15,0,0" ToolTip="İşlemi zorla sonlandırır."/>
+                                        <TextBlock Text="Hariç Tutulanlar (her satıra bir .exe)" Style="{StaticResource LabelStyle}" Margin="0,15,0,8" ToolTip="Process Killer tarafından sonlandırılmayacak işlem adları (örneğin, explorer.exe)."/>
+                                        <TextBox x:Name="TxtProcessKillerExclusions" AcceptsReturn="True" Height="80" VerticalScrollBarVisibility="Auto"/>
+                                    </StackPanel>
+                                </GroupBox>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid x:Name="PnlCanary" Visibility="{Binding IsCanaryPanelVisible, Converter={StaticResource BoolToVis}}">
+                            <StackPanel>
+                                <TextBlock Text="Canary Ayarları" Style="{StaticResource PageTitleStyle}"/>
+                                <TextBlock Text="Canary ayarları, fidye yazılımları gibi tehditleri erken aşamada tespit etmek için sistemde tuzak dosyalar oluşturur." Foreground="{StaticResource SubtleTextColorBrush}" TextWrapping="Wrap" Margin="0,0,0,20"/>
+                                <GroupBox Header="Canary Yapılandırması">
+                                    <StackPanel>
+                                        <CheckBox x:Name="ChkCanaryEnabled" Content="Canary'yi Etkinleştir" Style="{StaticResource ToggleSwitchStyle}" ToolTip="Fidye yazılımlarını tespit etmek için tuzak dosyalar oluşturur."/>
+                                        <CheckBox x:Name="ChkCanaryAlertOnOpen" Content="Açıldığında Uyar" Style="{StaticResource ToggleSwitchStyle}" Margin="0,15,0,0" ToolTip="Tuzak dosya açıldığında uyarı gösterir."/>
+                                        <CheckBox x:Name="ChkCanaryQuarantineOnHit" Content="Vurulduğunda Karantinaya Al" Style="{StaticResource ToggleSwitchStyle}" Margin="0,15,0,0" ToolTip="Tuzak dosya tetiklendiğinde ilgili süreci karantinaya alır."/>
+                                        <TextBlock Text="Yeniden Tohumlama (saat)" Style="{StaticResource LabelStyle}" Margin="0,15,0,8" ToolTip="Tuzak dosyaların ne kadar sürede bir yeniden oluşturulacağını belirler (saat cinsinden)."/>
+                                        <TextBox x:Name="TxtCanaryReseedHours"/>
+                                        <TextBlock Text="Bırakılacak Yollar (her satıra bir tane)" Style="{StaticResource LabelStyle}" Margin="0,15,0,8" ToolTip="Tuzak dosyaların bırakılacağı dizinler."/>
+                                        <TextBox x:Name="TxtCanaryDropPaths" AcceptsReturn="True" Height="80" VerticalScrollBarVisibility="Auto"/>
+                                        <TextBlock Text="Dosya Adları (her satıra bir tane)" Style="{StaticResource LabelStyle}" Margin="0,15,0,8" ToolTip="Oluşturulacak tuzak dosyaların adları."/>
+                                        <TextBox x:Name="TxtCanaryFilenames" AcceptsReturn="True" Height="80" VerticalScrollBarVisibility="Auto"/>
+                                        <TextBlock Text="İçerik İşaretçileri (her satıra bir tane)" Style="{StaticResource LabelStyle}" Margin="0,15,0,8" ToolTip="Tuzak dosyaların içine eklenecek özel içerik işaretçileri."/>
+                                        <TextBox x:Name="TxtCanaryContentMarkers" AcceptsReturn="True" Height="80" VerticalScrollBarVisibility="Auto"/>
+                                    </StackPanel>
+                                </GroupBox>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid x:Name="PnlLogs" Visibility="{Binding IsLogsPanelVisible, Converter={StaticResource BoolToVis}}">
+                            <StackPanel>
+                                <TextBlock Text="Log Görüntüleyici" Style="{StaticResource PageTitleStyle}"/>
+                                <TextBlock Text="Agent tarafından oluşturulan olay kayıtlarını buradan görebilirsiniz." Foreground="{StaticResource SubtleTextColorBrush}" TextWrapping="Wrap" Margin="0,0,0,20"/>
+
+                                <Button Command="{Binding NavigateCommand}" CommandParameter="Logs" HorizontalAlignment="Right" Style="{StaticResource PrimaryActionButtonStyle}" Padding="10,5" FontSize="12" Margin="0,0,0,10" ToolTip="Logları yeniden yükle">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE72C;" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                        <TextBlock Text="Yenile"/>
+                                    </StackPanel>
+                                </Button>
+
+                                <DataGrid ItemsSource="{Binding Logs}" AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="None" Height="550" BorderThickness="0">
+                                    <DataGrid.CellStyle>
+                                        <Style TargetType="DataGridCell">
+                                            <Setter Property="Padding" Value="10,8"/>
+                                            <Setter Property="BorderThickness" Value="0"/>
+                                        </Style>
+                                    </DataGrid.CellStyle>
+                                    <DataGrid.RowStyle>
+                                        <Style TargetType="DataGridRow">
+                                            <Setter Property="Background" Value="{Binding Reasons, Converter={StaticResource ReasonToBrushConv}}"/>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="{StaticResource MouseOverBrush}"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </DataGrid.RowStyle>
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Zaman (UTC)" Binding="{Binding CreatedUtc, StringFormat='yyyy-MM-dd HH:mm:ss'}" Width="150"/>
+                                        <DataGridTextColumn Header="Neden" Binding="{Binding Reasons[0]}" Width="120"/>
+                                        <DataGridTextColumn Header="Orijinal Dosya Yolu" Binding="{Binding OriginalPath}" Width="*"/>
+                                        <DataGridTextColumn Header="Boyut (bytes)" Binding="{Binding Size}" Width="100"/>
+                                    </DataGrid.Columns>
+                                    <DataGrid.RowDetailsTemplate>
+                                        <DataTemplate>
+                                            <Border Margin="10" Padding="15" Background="#2D2D30" CornerRadius="5">
+                                                <StackPanel>
+                                                    <StackPanel.Resources>
+                                                        <Style TargetType="TextBlock" x:Key="DetailHeader">
+                                                            <Setter Property="FontWeight" Value="Bold"/>
+                                                            <Setter Property="Foreground" Value="{StaticResource AccentColorBrush}"/>
+                                                            <Setter Property="Margin" Value="0,10,0,5"/>
+                                                        </Style>
+                                                        <Style TargetType="TextBlock" x:Key="DetailText">
+                                                            <Setter Property="TextWrapping" Value="Wrap"/>
+                                                            <Setter Property="Foreground" Value="{StaticResource SubtleTextColorBrush}"/>
+                                                        </Style>
+                                                    </StackPanel.Resources>
+                                                    
+                                                    <TextBlock Text="Ek Detaylar" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+                                                    
+                                                    <StackPanel Visibility="{Binding HostUrl, Converter={StaticResource BoolToVis}}">
+                                                        <TextBlock Text="İndirme Kaynağı (URL):" Style="{StaticResource DetailHeader}"/>
+                                                        <TextBlock Text="{Binding HostUrl}" Style="{StaticResource DetailText}" TextDecorations="Underline" Cursor="Hand" MouseDown="HostUrl_MouseDown"/>
+                                                    </StackPanel>
+
+                                                    <StackPanel Visibility="{Binding LlmAnalysis, Converter={StaticResource BoolToVis}}">
+                                                        <TextBlock Text="Yapay Zeka Analizi:" Style="{StaticResource DetailHeader}"/>
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <TextBlock Grid.Column="0" Text="Risk Skoru: " FontWeight="SemiBold"/>
+                                                            <TextBlock Grid.Column="1" Text="{Binding LlmAnalysis.RiskScore}" FontWeight="Bold"/>
+                                                        </Grid>
+                                                        <TextBlock Text="Özet:" FontWeight="SemiBold" Margin="0,5,0,0"/>
+                                                        <TextBlock Text="{Binding LlmAnalysis.Summary}" Style="{StaticResource DetailText}"/>
+                                                        <TextBlock Text="Gerekçe:" FontWeight="SemiBold" Margin="0,5,0,0"/>
+                                                        <TextBlock Text="{Binding LlmAnalysis.Reasoning}" Style="{StaticResource DetailText}"/>
+                                                    </StackPanel>
+                                                    
+                                                </StackPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </DataGrid.RowDetailsTemplate>
+                                </DataGrid>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Advanced Protection Panel -->
+                        <Grid x:Name="PnlAdvanced" Visibility="{Binding IsAdvancedPanelVisible, Converter={StaticResource BoolToVis}}">
+                            <StackPanel>
+                                <TextBlock Text="Gelişmiş Koruma Ayarları" Style="{StaticResource PageTitleStyle}"/>
+                                
+                                <GroupBox Header="Pano Koruması (Clipboard)">
+                                    <StackPanel>
+                                        <CheckBox x:Name="ChkClipboardEnabled" Content="Pano Korumasını Etkinleştir" Style="{StaticResource ToggleSwitchStyle}" ToolTip="Panoyu bilinen zararlı desenlere (kripto para adresleri vb.) karşı izler."/>
+                                        <TextBlock Text="Tarama Aralığı (saniye)" Style="{StaticResource LabelStyle}" Margin="0,15,0,8"/>
+                                        <TextBox x:Name="TxtClipboardInterval"/>
+                                        <TextBlock Text="Tespit Desenleri (Regex, her satıra bir tane)" Style="{StaticResource LabelStyle}" Margin="0,15,0,8"/>
+                                        <TextBox x:Name="TxtClipboardPatterns" AcceptsReturn="True" Height="100" VerticalScrollBarVisibility="Auto"/>
+                                    </StackPanel>
+                                </GroupBox>
+
+                                <GroupBox Header="Tuzak Servisler (Honeypot)">
+                                    <StackPanel>
+                                        <CheckBox x:Name="ChkHoneypotEnabled" Content="Tuzak Servisleri Etkinleştir" Style="{StaticResource ToggleSwitchStyle}" ToolTip="Zararlı yazılımları çekmek için sahte ağ servisleri açar ve bağlanan işlemleri anında tespit eder."/>
+                                        <TextBlock Text="Dinlenecek Portlar (virgülle ayırın)" Style="{StaticResource LabelStyle}" Margin="0,15,0,8"/>
+                                        <TextBox x:Name="TxtHoneypotPorts"/>
+                                    </StackPanel>
+                                </GroupBox>
+
+                                <GroupBox Header="İndirme Kaynağı Analizi">
+                                    <StackPanel>
+                                        <CheckBox x:Name="ChkDownloadAnalysisEnabled" Content="İndirme Kaynağı Analizini Etkinleştir" Style="{StaticResource ToggleSwitchStyle}" ToolTip="İnternetten indirilen dosyaların kaynak URL'sini tespit eder ve olay kayıtlarına ekler."/>
+                                    </StackPanel>
+                                </GroupBox>
+
+                                <GroupBox Header="Yapay Zeka (LLM) Analizi">
+                                    <StackPanel>
+                                        <CheckBox x:Name="ChkLlmAnalysisEnabled" Content="LLM Analizini Etkinleştir" Style="{StaticResource ToggleSwitchStyle}" ToolTip="Tespit edilen olayları daha derin bir analiz için Gemini gibi bir yapay zeka modeline gönderir."/>
+                                        <TextBlock Text="LLM Sağlayıcısı" Style="{StaticResource LabelStyle}" Margin="0,15,0,8"/>
+                                        <ComboBox x:Name="CmbLlmProvider" SelectedValuePath="Tag" SelectedIndex="0" SelectionChanged="CmbLlmProvider_SelectionChanged">
+                                            <ComboBoxItem Content="Google Gemini" Tag="Gemini"/>
+                                            <ComboBoxItem Content="OpenAI GPT" Tag="OpenAI"/>
+                                        </ComboBox>
+                                        <TextBlock Text="Model" Style="{StaticResource LabelStyle}" Margin="0,15,0,8"/>
+                                        <TextBox x:Name="TxtLlmModel"/>
+                                        <TextBlock Text="API Anahtarı" Style="{StaticResource LabelStyle}" Margin="0,15,0,8"/>
+                                        <TextBox x:Name="TxtLlmApiKey"/>
+                                        <TextBlock Text="API Uç Noktası (Endpoint)" Style="{StaticResource LabelStyle}" Margin="0,15,0,8"/>
+                                        <TextBox x:Name="TxtLlmApiEndpoint"/>
+                                    </StackPanel>
+                                </GroupBox>
+
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- IOC Loading Indicator -->
+                        <Border Background="#80000000" CornerRadius="5"
+                                Visibility="{Binding IsIocLoading, Converter={StaticResource BoolToVis}}">
+                            <TextBlock Text="IOC verileri yükleniyor..." 
+                                       HorizontalAlignment="Center" 
+                                       VerticalAlignment="Center" 
+                                       FontSize="18" 
+                                       FontWeight="Bold"
+                                       Foreground="White"/>
+                        </Border>
+                    </Grid>
+                </ScrollViewer>
+            </Grid>
+
+            <!-- Alt Bar (Kaydet Butonu) -->
+            <Border Grid.Row="2" BorderBrush="{StaticResource BorderColorBrush}" BorderThickness="0,1,0,0" Padding="20">
+                <Button x:Name="BtnSave" Content="Değişiklikleri Kaydet" HorizontalAlignment="Right" Style="{StaticResource PrimaryActionButtonStyle}"/>
+            </Border>
+        </Grid>
+    </Border>
+</Window>
