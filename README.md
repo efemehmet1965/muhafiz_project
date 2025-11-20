@@ -6,6 +6,18 @@
 
 **Muhafız**, modern bilgi hırsızı (stealer), fidye yazılımı (ransomware) ve diğer zararlı yazılımlara karşı proaktif, çok katmanlı bir savunma sağlamak amacıyla geliştirilmiş açık kaynaklı bir güvenlik ajanıdır. Sadece bilinen imzalarla değil, aynı zamanda davranışsal analiz ve anomali tespiti gibi gelişmiş yöntemlerle sisteminizi korur.
 
+## 🎓 Projenin Künyesi ve Geliştirme Ekibi
+
+Bu proje, **Sivas Cumhuriyet Üniversitesi Şarkışla Uygulamalı Bilimler Yüksekokulu**'nda hayata geçirilmiştir. Geliştirme sürecinde emeği geçen değerli ekip aşağıda belirtilmiştir:
+
+**Akademik Danışman**
+*   Doç. Dr. Mesut Polatgil
+
+**Geliştirme Ekibi**
+*   Mehmet Can Efe (*Proje Lideri*)
+*   İbrahim Arslan (*Geliştirici*)
+
+
 ## ✨ Temel Özellikler (Savunma Katmanları)
 
 Muhafız, tehditleri saldırı zincirinin farklı aşamalarında yakalamak için çeşitli modüller kullanır:
