@@ -1,6 +1,8 @@
 # Muhafız: Gelişmiş Tehdit Savunma Ajanı
+<img width="1919" height="1079" alt="resim" src="https://github.com/user-attachments/assets/ee2ad2fd-1d23-48bf-8a0b-9c990f47812a" />
 
-![Muhafız Yönetim Paneli](https://raw.githubusercontent.com/efemehmet1965/muhafiz-project/main/assets/ui.png)
+<img width="1919" height="1079" alt="resim" src="https://github.com/user-attachments/assets/2c4e3a62-4f00-4c22-adac-5c37df9bff4e" />
+
 
 ## 🛡️ Hakkında
 
@@ -48,7 +50,11 @@ Muhafız, iki ana bileşenden oluşur:
 
 Tüm yapılandırma dosyaları, olay kayıtları (loglar), karantina ve YARA kuralları gibi operasyonel veriler, `%PROGRAMDATA%\Muhafiz` klasörü altında merkezî bir konumda saklanır.
 
-![Muhafız IoC Yönetimi](https://raw.githubusercontent.com/efemehmet1965/muhafiz-project/main/assets/ioc.png)
+<img width="1918" height="1079" alt="resim" src="https://github.com/user-attachments/assets/7aa8b425-0968-4f89-9954-75ea3ee7636c" />
+
+<img width="1919" height="1079" alt="resim" src="https://github.com/user-attachments/assets/c36374fa-7c35-43da-9fd9-de01a715fcfc" />
+
+
 
 ## 🚀 Kurulum ve Kullanım
 
