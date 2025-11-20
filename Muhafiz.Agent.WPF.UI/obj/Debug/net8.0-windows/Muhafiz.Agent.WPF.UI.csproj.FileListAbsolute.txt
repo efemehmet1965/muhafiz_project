@@ -1,0 +1,74 @@
+C:\Users\ÇOGA\Desktop\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\bin\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.exe
+C:\Users\ÇOGA\Desktop\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\bin\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.deps.json
+C:\Users\ÇOGA\Desktop\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\bin\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.runtimeconfig.json
+C:\Users\ÇOGA\Desktop\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\bin\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.dll
+C:\Users\ÇOGA\Desktop\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\bin\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.pdb
+C:\Users\ÇOGA\Desktop\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\bin\Debug\net8.0-windows\CommunityToolkit.Mvvm.dll
+C:\Users\ÇOGA\Desktop\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.csproj.AssemblyReference.cache
+C:\Users\ÇOGA\Desktop\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\MainWindow.g.cs
+C:\Users\ÇOGA\Desktop\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\App.g.cs
+C:\Users\ÇOGA\Desktop\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\GeneratedInternalTypeHelper.g.cs
+C:\Users\ÇOGA\Desktop\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI_MarkupCompile.cache
+C:\Users\ÇOGA\Desktop\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI_MarkupCompile.lref
+C:\Users\ÇOGA\Desktop\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\MainWindow.baml
+C:\Users\ÇOGA\Desktop\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.g.resources
+C:\Users\ÇOGA\Desktop\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ÇOGA\Desktop\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.AssemblyInfoInputs.cache
+C:\Users\ÇOGA\Desktop\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.AssemblyInfo.cs
+C:\Users\ÇOGA\Desktop\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.csproj.CoreCompileInputs.cache
+C:\Users\ÇOGA\Desktop\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.sourcelink.json
+C:\Users\ÇOGA\Desktop\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz..178CFE38.Up2Date
+C:\Users\ÇOGA\Desktop\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.dll
+C:\Users\ÇOGA\Desktop\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\refint\Muhafiz.Agent.WPF.UI.dll
+C:\Users\ÇOGA\Desktop\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.pdb
+C:\Users\ÇOGA\Desktop\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.genruntimeconfig.cache
+C:\Users\ÇOGA\Desktop\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\ref\Muhafiz.Agent.WPF.UI.dll
+D:\PROJELER\Muhafiz Projesi\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\bin\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.exe
+D:\PROJELER\Muhafiz Projesi\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\bin\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.deps.json
+D:\PROJELER\Muhafiz Projesi\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\bin\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.runtimeconfig.json
+D:\PROJELER\Muhafiz Projesi\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\bin\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.dll
+D:\PROJELER\Muhafiz Projesi\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\bin\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.pdb
+D:\PROJELER\Muhafiz Projesi\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\bin\Debug\net8.0-windows\CommunityToolkit.Mvvm.dll
+D:\PROJELER\Muhafiz Projesi\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.csproj.AssemblyReference.cache
+D:\PROJELER\Muhafiz Projesi\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\MainWindow.g.cs
+D:\PROJELER\Muhafiz Projesi\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\App.g.cs
+D:\PROJELER\Muhafiz Projesi\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\GeneratedInternalTypeHelper.g.cs
+D:\PROJELER\Muhafiz Projesi\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI_MarkupCompile.cache
+D:\PROJELER\Muhafiz Projesi\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI_MarkupCompile.lref
+D:\PROJELER\Muhafiz Projesi\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\MainWindow.baml
+D:\PROJELER\Muhafiz Projesi\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.g.resources
+D:\PROJELER\Muhafiz Projesi\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.GeneratedMSBuildEditorConfig.editorconfig
+D:\PROJELER\Muhafiz Projesi\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.AssemblyInfoInputs.cache
+D:\PROJELER\Muhafiz Projesi\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.AssemblyInfo.cs
+D:\PROJELER\Muhafiz Projesi\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.csproj.CoreCompileInputs.cache
+D:\PROJELER\Muhafiz Projesi\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz..178CFE38.Up2Date
+D:\PROJELER\Muhafiz Projesi\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.dll
+D:\PROJELER\Muhafiz Projesi\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\refint\Muhafiz.Agent.WPF.UI.dll
+D:\PROJELER\Muhafiz Projesi\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.pdb
+D:\PROJELER\Muhafiz Projesi\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.genruntimeconfig.cache
+D:\PROJELER\Muhafiz Projesi\Muhafiz.Agent\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\ref\Muhafiz.Agent.WPF.UI.dll
+C:\Users\ÇOGA\Desktop\muhafiz_project\Muhafiz.Agent.WPF.UI\bin\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.exe
+C:\Users\ÇOGA\Desktop\muhafiz_project\Muhafiz.Agent.WPF.UI\bin\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.deps.json
+C:\Users\ÇOGA\Desktop\muhafiz_project\Muhafiz.Agent.WPF.UI\bin\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.runtimeconfig.json
+C:\Users\ÇOGA\Desktop\muhafiz_project\Muhafiz.Agent.WPF.UI\bin\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.dll
+C:\Users\ÇOGA\Desktop\muhafiz_project\Muhafiz.Agent.WPF.UI\bin\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.pdb
+C:\Users\ÇOGA\Desktop\muhafiz_project\Muhafiz.Agent.WPF.UI\bin\Debug\net8.0-windows\CommunityToolkit.Mvvm.dll
+C:\Users\ÇOGA\Desktop\muhafiz_project\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.csproj.AssemblyReference.cache
+C:\Users\ÇOGA\Desktop\muhafiz_project\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\MainWindow.g.cs
+C:\Users\ÇOGA\Desktop\muhafiz_project\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\App.g.cs
+C:\Users\ÇOGA\Desktop\muhafiz_project\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\GeneratedInternalTypeHelper.g.cs
+C:\Users\ÇOGA\Desktop\muhafiz_project\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI_MarkupCompile.cache
+C:\Users\ÇOGA\Desktop\muhafiz_project\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI_MarkupCompile.lref
+C:\Users\ÇOGA\Desktop\muhafiz_project\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\MainWindow.baml
+C:\Users\ÇOGA\Desktop\muhafiz_project\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.g.resources
+C:\Users\ÇOGA\Desktop\muhafiz_project\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ÇOGA\Desktop\muhafiz_project\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.AssemblyInfoInputs.cache
+C:\Users\ÇOGA\Desktop\muhafiz_project\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.AssemblyInfo.cs
+C:\Users\ÇOGA\Desktop\muhafiz_project\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.csproj.CoreCompileInputs.cache
+C:\Users\ÇOGA\Desktop\muhafiz_project\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.sourcelink.json
+C:\Users\ÇOGA\Desktop\muhafiz_project\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz..178CFE38.Up2Date
+C:\Users\ÇOGA\Desktop\muhafiz_project\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.dll
+C:\Users\ÇOGA\Desktop\muhafiz_project\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\refint\Muhafiz.Agent.WPF.UI.dll
+C:\Users\ÇOGA\Desktop\muhafiz_project\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.pdb
+C:\Users\ÇOGA\Desktop\muhafiz_project\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\Muhafiz.Agent.WPF.UI.genruntimeconfig.cache
+C:\Users\ÇOGA\Desktop\muhafiz_project\Muhafiz.Agent.WPF.UI\obj\Debug\net8.0-windows\ref\Muhafiz.Agent.WPF.UI.dll

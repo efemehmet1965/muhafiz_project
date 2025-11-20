@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "mYVdKufNjc4=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\ÇOGA\\Desktop\\muhafiz_project\\Muhafiz.Agent.WPF.UI\\Muhafiz.Agent.WPF.UI.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\ÇOGA\\.nuget\\packages\\communitytoolkit.mvvm\\8.4.0\\communitytoolkit.mvvm.8.4.0.nupkg.sha512",
+    "C:\\Users\\ÇOGA\\.nuget\\packages\\microsoft.visualbasic\\10.4.0-preview.18571.3\\microsoft.visualbasic.10.4.0-preview.18571.3.nupkg.sha512"
+  ],
+  "logs": []
+}

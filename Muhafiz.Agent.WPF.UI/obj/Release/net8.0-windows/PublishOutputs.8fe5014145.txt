@@ -1,0 +1,6 @@
+C:\Users\ÇOGA\Desktop\Muhafiz.Agent\Release\Muhafiz.Agent.WPF.UI.exe
+C:\Users\ÇOGA\Desktop\Muhafiz.Agent\Release\Muhafiz.Agent.WPF.UI.dll
+C:\Users\ÇOGA\Desktop\Muhafiz.Agent\Release\Muhafiz.Agent.WPF.UI.deps.json
+C:\Users\ÇOGA\Desktop\Muhafiz.Agent\Release\Muhafiz.Agent.WPF.UI.runtimeconfig.json
+C:\Users\ÇOGA\Desktop\Muhafiz.Agent\Release\Muhafiz.Agent.WPF.UI.pdb
+C:\Users\ÇOGA\Desktop\Muhafiz.Agent\Release\CommunityToolkit.Mvvm.dll
