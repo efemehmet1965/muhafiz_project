@@ -89,15 +89,10 @@ Muhafız'ın en güçlü yanlarından biri, tehdit istihbaratının yönetim pan
   ]
   ```
 
-## 🤝 Katkıda Bulunma
+## 🤝 Katkıda Bulunma ve Kullanım
 
-Katkılarınız projeyi daha da güçlendirecektir! Lütfen bir "pull request" açmaktan veya "issue" bildirmekten çekinmeyin.
+Bu proje MIT lisansı altında açık kaynaklıdır; kendi projelerinizde serbestçe kullanabilir ve geliştirebilirsiniz. Hata raporları, özellik istekleri veya kod katkıları gibi her türlü geri bildirim ve katkıdan çekinmeyin. Bir 'Issue' açmanız veya 'Pull Request' göndermeniz yeterlidir.
 
-1.  Projeyi fork'layın.
-2.  Yeni bir özellik dalı oluşturun (`git checkout -b feature/YeniOzellik`).
-3.  Değişikliklerinizi commit'leyin (`git commit -am 'Yeni özellik eklendi'`).
-4.  Dalınızı push'layın (`git push origin feature/YeniOzellik`).
-5.  Bir Pull Request oluşturun.
 
 ## 📄 Lisans
 
