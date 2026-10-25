@@ -69,7 +69,7 @@ namespace Muhafiz.Agent.Analysis.Backends
                     Data = new()
                     {
                         { "HashFound", found },
-                        { "Verdict", verdict }
+                        { "Verdict", verdict ?? "" }
                     }
                 };
             }

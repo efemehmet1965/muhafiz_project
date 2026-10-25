@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Muhafiz.Agent.Analysis
@@ -42,7 +43,7 @@ namespace Muhafiz.Agent.Analysis
                 _model = IsOpenAiProvider() ? "gpt-4o-mini" : "gemini-pro";
             }
 
-            _httpClient = new HttpClient();
+            _httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(30) };
         }
 
         public bool IsEnabled => _enabled && !string.IsNullOrEmpty(_apiKey) && !string.IsNullOrEmpty(_apiEndpoint);
@@ -218,8 +219,13 @@ Your JSON response:";
 
     public class LlmAnalysisResult
     {
+        [JsonPropertyName("risk_score")]
         public int RiskScore { get; set; }
+
+        [JsonPropertyName("summary")]
         public string? Summary { get; set; }
+
+        [JsonPropertyName("reasoning")]
         public string? Reasoning { get; set; }
     }
 }

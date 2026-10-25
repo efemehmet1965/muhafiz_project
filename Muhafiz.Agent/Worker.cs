@@ -13,10 +13,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Muhafiz.Agent.Analysis;
+using Muhafiz.Agent.Ioc;
 using Muhafiz.Agent.Monitoring;
 using Muhafiz.Agent.Response;
 using Muhafiz.Agent.Utils;
 using Muhafiz.Agent.Pipelines;
+using Muhafiz.Agent.Update;
 
 namespace Muhafiz.Agent
 {
@@ -36,11 +38,18 @@ namespace Muhafiz.Agent
         private readonly string _quarantineRoot;
         private readonly string _iocRoot;
 
-        private HashSet<string> _iocHashes = new(StringComparer.OrdinalIgnoreCase);
+        private IocStore? _iocStore;
+        private IocWatcher? _iocWatcher;
+        private readonly bool _sandboxEnabled;
+        private readonly bool _egressConditionalWebhookBlock;
         private string[] _egressHostsOnIncident = Array.Empty<string>();
 
         private readonly bool _yaraEnabled;
         private readonly bool _downloadAnalysisEnabled;
+
+        // YARA/hash taramasının aynı dosya için tekrar tetiklenmesini önlemek için debounce
+        private readonly System.Collections.Concurrent.ConcurrentDictionary<string, DateTime> _recentScans
+            = new(StringComparer.OrdinalIgnoreCase);
 
         public Worker(
             ILogger<Worker> log,
@@ -62,7 +71,8 @@ namespace Muhafiz.Agent
             _eventsRoot = Expand(_cfg["Events:Root"] ?? @"%PROGRAMDATA%\Muhafiz\events");
             _eventsRetentionDays = _cfg.GetValue<int>("Events:RetentionDays", 30);
             _quarantineRoot = Expand(_cfg["Quarantine:Root"] ?? @"%PROGRAMDATA%\Muhafiz\Q");
-            _iocRoot = Expand(_cfg["Ioc:HashesPath"]?.Replace("hashes.json", "") ?? @"%PROGRAMDATA%\Muhafiz\ioc");
+            _iocRoot = Path.GetDirectoryName(Expand(_cfg["Ioc:HashesPath"] ?? @"%PROGRAMDATA%\Muhafiz\ioc\hashes.json"))
+                        ?? @"%PROGRAMDATA%\Muhafiz\ioc";
 
             Directory.CreateDirectory(_eventsRoot);
             Directory.CreateDirectory(_quarantineRoot);
@@ -70,6 +80,8 @@ namespace Muhafiz.Agent
 
             _yaraEnabled = _cfg.GetValue<bool>("Yara:Enabled");
             _downloadAnalysisEnabled = _cfg.GetValue<bool>("DownloadAnalysis:Enabled");
+            _sandboxEnabled = _cfg.GetValue<bool>("Sandbox:Enabled");
+            _egressConditionalWebhookBlock = _cfg.GetValue<bool>("Egress:ConditionalWebhookBlock");
 
             _egressHostsOnIncident = (_cfg.GetSection("Egress:Conditional:Hosts").Get<string[]>() ?? Array.Empty<string>())
                                      .Where(s => !string.IsNullOrWhiteSpace(s))
@@ -82,11 +94,31 @@ namespace Muhafiz.Agent
             {
                 LogHeader();
                 await LoadIocsAsync(stoppingToken);
-                WatchIocFolder();
 
                 var watched = _cfg.GetSection("WatchedPaths").Get<string[]>() ?? Array.Empty<string>();
                 foreach (var p in watched.Select(Expand).Where(Directory.Exists))
                     StartWatcher(p);
+
+                // IOC hot-reload (debounce'lu dosya izleyici)
+                _iocWatcher = new IocWatcher(_cfg, _log, _iocRoot, store => _iocStore = store);
+
+                // IOC IP bloklarını firewall'a uygula (kalıcı kurallar)
+                if (_iocStore is { } initialStore)
+                    await _egressBlocker.InitializeAsync(initialStore, stoppingToken);
+
+                // DNS anomali tespiti (DnsAnomaly:Enabled)
+                if (_cfg.GetValue<bool>("DnsAnomaly:Enabled"))
+                {
+                    var dnsWatcher = new DnsAnomalyWatcher(_cfg, _log, () => _iocStore);
+                    _ = dnsWatcher.RunAsync(stoppingToken);
+                }
+
+                // Güncelleme kanalı izleyicisi (UpdateChannel:Enabled)
+                if (_cfg.GetValue<bool>("UpdateChannel:Enabled"))
+                {
+                    var updateWatcher = new UpdateWatcher(_cfg, _log);
+                    _ = updateWatcher.RunAsync(stoppingToken);
+                }
 
                 await _canary.InitAsync(stoppingToken);
                 _log.LogInformation("CanaryWatcher is starting.");
@@ -102,6 +134,7 @@ namespace Muhafiz.Agent
             finally
             {
                 foreach (var w in _watchers) { try { w.Dispose(); } catch { } }
+                _iocWatcher?.Dispose();
             }
         }
 
@@ -114,6 +147,7 @@ namespace Muhafiz.Agent
                 {
                     await _egressBlocker.CleanupAsync(stoppingToken);
                     CleanOldEvents();
+                    CleanRecentScans();
                 }
                 catch (Exception ex) { _log.LogWarning(ex, "Error during periodic cleanup."); }
                 await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
@@ -149,6 +183,20 @@ namespace Muhafiz.Agent
         private void OnRenamed(object sender, RenamedEventArgs e) => OnFsEvent(sender, new FileSystemEventArgs(WatcherChangeTypes.Created, e.FullPath, e.Name));
         private void OnFsEvent(object sender, FileSystemEventArgs e) => _ = HandleFileEventAsync(e);
 
+        /// <summary>
+        /// Aynı dosya için Created+Changed+Renamed olaylarından doğan tekrarları
+        /// engellemek amacıyla 5 saniyelik debounce uygular.
+        /// </summary>
+        private static bool ShouldScan(IDictionary<string, DateTime> recent, string fullPath)
+        {
+            var now = DateTime.UtcNow;
+            if (recent.TryGetValue(fullPath, out var last) && (now - last).TotalSeconds < 5)
+                return false;
+
+            recent[fullPath] = now;
+            return true;
+        }
+
         private async Task HandleFileEventAsync(FileSystemEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(e.FullPath) || !File.Exists(e.FullPath)) return;
@@ -157,11 +205,14 @@ namespace Muhafiz.Agent
             var info = new FileInfo(e.FullPath);
             if (!info.Exists) return;
 
+            // Aynı dosyaya gelen çoklu FS olaylarında tekrar taramayı engelle (debounce)
+            if (!ShouldScan(_recentScans, e.FullPath)) return;
+
             var sha256 = await TrySha256Async(e.FullPath) ?? "<sha-fail>";
             _log.LogDebug("Handling file event {type} for {path}", e.ChangeType, e.FullPath);
 
             var reasons = new List<string>();
-            if (_iocHashes.Contains(sha256)) reasons.Add("IOC_HASH");
+            if (_iocStore?.IsHashBlocked(sha256) == true) reasons.Add("IOC_HASH");
 
             if (_yaraEnabled)
             {
@@ -179,6 +230,20 @@ namespace Muhafiz.Agent
             string? hostUrl = _downloadAnalysisEnabled ? AdsReader.GetZoneIdentifierUrl(e.FullPath) : null;
             if (hostUrl != null) _log.LogInformation("File download source: {url}", hostUrl);
 
+            // Koşullu egress bloğu: indirme kaynağı + olay anında bloklanacak ek host'lar (TTL'li)
+            if (_egressConditionalWebhookBlock)
+            {
+                var hostsToBlock = new List<string>();
+                if (!string.IsNullOrWhiteSpace(hostUrl)) hostsToBlock.Add(hostUrl);
+                hostsToBlock.AddRange(_egressHostsOnIncident);
+
+                foreach (var host in hostsToBlock.Distinct(StringComparer.OrdinalIgnoreCase))
+                {
+                    try { await _egressBlocker.BlockSuspiciousHostAsync(host, CancellationToken.None); }
+                    catch (Exception ex) { _log.LogWarning(ex, "Egress conditional bloğu uygulanamadı: {host}", host); }
+                }
+            }
+
             var q = await TryQuarantineAsync(e.FullPath, sha256, reasons.ToArray());
             if (q.Success)
             {
@@ -194,8 +259,19 @@ namespace Muhafiz.Agent
                     HostUrl = hostUrl
                 };
                 _ = WriteAndEnrichEventAsync(incident);
-                
-                // Further actions like sandbox, egress block etc. can be triggered here
+
+                // Karantina sonrası sandbox analizini kuyruğa al (Sandbox:Enabled)
+                if (_sandboxEnabled)
+                {
+                    _sandbox.Enqueue(new SandboxJob
+                    {
+                        Sha256 = sha256,
+                        OriginalPath = e.FullPath,
+                        QuarantinedPath = q.QuarantinePath,
+                        Trigger = SandboxTrigger.OnQuarantine,
+                        Reasons = reasons.ToArray()
+                    });
+                }
             }
             else
             {
@@ -203,41 +279,19 @@ namespace Muhafiz.Agent
             }
         }
 
-        private void WatchIocFolder()
-        {
-            var w = new FileSystemWatcher(_iocRoot)
-            {
-                IncludeSubdirectories = false,
-                NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite
-            };
-            w.Changed += async (_, __) => await LoadIocsAsync(CancellationToken.None);
-            w.Created += async (_, __) => await LoadIocsAsync(CancellationToken.None);
-            w.EnableRaisingEvents = true;
-            _log.LogInformation("IOC watcher started for {dir}", _iocRoot);
-        }
-
         private async Task LoadIocsAsync(CancellationToken ct)
         {
-            var hashesFile = Path.Combine(_iocRoot, "hashes.json");
-            if (!File.Exists(hashesFile)) return;
-
             try
             {
-                using var s = File.OpenRead(hashesFile);
-                var iocData = await JsonSerializer.DeserializeAsync<JsonElement>(s, cancellationToken: ct);
-                var newHashes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-
-                if (iocData.ValueKind == JsonValueKind.Array)
-                {
-                    foreach (var el in iocData.EnumerateArray())
-                        if (el.ValueKind == JsonValueKind.String) newHashes.Add(el.GetString()!);
-                }
-                _iocHashes = newHashes;
-                _log.LogInformation("Loaded {count} IOC hashes.", _iocHashes.Count);
+                await Task.Run(() => _iocStore = IocStore.Load(_cfg, _log), ct);
+                _log.LogInformation("IOC store loaded. {h} hash, {hosts} host, {ips} IP.",
+                    _iocStore?.Hashes.Count ?? 0,
+                    _iocStore?.BlockedHosts.Count ?? 0,
+                    _iocStore?.IocIps.Count ?? 0);
             }
             catch (Exception ex)
             {
-                _log.LogWarning(ex, "Failed to load IOC hashes.");
+                _log.LogWarning(ex, "Failed to load IOC store.");
             }
         }
 
@@ -296,9 +350,18 @@ namespace Muhafiz.Agent
             }
         }
         
-        private void CleanOldEvents()
+        private void CleanRecentScans()
         {
-            if (_eventsRetentionDays <= 0) return;
+            var cutoff = DateTime.UtcNow.AddMinutes(-1);
+            foreach (var kv in _recentScans)
+            {
+                if (kv.Value < cutoff)
+                    _recentScans.TryRemove(kv.Key, out _);
+            }
+        }
+
+        private void CleanOldEvents()
+        {            if (_eventsRetentionDays <= 0) return;
             var cutoffDate = DateTime.UtcNow.AddDays(-_eventsRetentionDays);
             foreach (var dir in Directory.EnumerateDirectories(_eventsRoot))
             {

@@ -10,8 +10,7 @@
         "dependencies": {
           "Microsoft.Extensions.Hosting": "8.0.1",
           "Microsoft.Extensions.Hosting.WindowsServices": "8.0.1",
-          "Microsoft.Extensions.Http": "9.0.8",
-          "PeNet": "5.1.0"
+          "Microsoft.Extensions.Http": "9.0.8"
         },
         "runtime": {
           "Muhafiz.Agent.dll": {}
@@ -407,26 +406,6 @@
           }
         }
       },
-      "PeNet/5.1.0": {
-        "dependencies": {
-          "PeNet.Asn1": "2.0.1",
-          "System.Security.Cryptography.Pkcs": "8.0.1"
-        },
-        "runtime": {
-          "lib/net8.0/PeNet.dll": {
-            "assemblyVersion": "5.1.0.0",
-            "fileVersion": "5.1.0.0"
-          }
-        }
-      },
-      "PeNet.Asn1/2.0.1": {
-        "runtime": {
-          "lib/net7.0/PeNet.Asn1.dll": {
-            "assemblyVersion": "2.0.1.0",
-            "fileVersion": "2.0.1.0"
-          }
-        }
-      },
       "System.Diagnostics.DiagnosticSource/9.0.8": {
         "runtime": {
           "lib/net8.0/System.Diagnostics.DiagnosticSource.dll": {
@@ -444,22 +423,6 @@
         },
         "runtimeTargets": {
           "runtimes/win/lib/net8.0/System.Diagnostics.EventLog.dll": {
-            "rid": "win",
-            "assetType": "runtime",
-            "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.0.1024.46610"
-          }
-        }
-      },
-      "System.Security.Cryptography.Pkcs/8.0.1": {
-        "runtime": {
-          "lib/net8.0/System.Security.Cryptography.Pkcs.dll": {
-            "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.0.1024.46610"
-          }
-        },
-        "runtimeTargets": {
-          "runtimes/win/lib/net8.0/System.Security.Cryptography.Pkcs.dll": {
             "rid": "win",
             "assetType": "runtime",
             "assemblyVersion": "8.0.0.0",
@@ -697,20 +660,6 @@
       "path": "microsoft.extensions.primitives/9.0.8",
       "hashPath": "microsoft.extensions.primitives.9.0.8.nupkg.sha512"
     },
-    "PeNet/5.1.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-XSd1PUwWo5uI8iqVHk7Mm02RT1bjndtAYsaRwLmdYZoHOAmb4ohkvRcZiqxJ7iLfBfdiwm+PHKQIMqDmOavBtw==",
-      "path": "penet/5.1.0",
-      "hashPath": "penet.5.1.0.nupkg.sha512"
-    },
-    "PeNet.Asn1/2.0.1": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-YR2O2YokSAYB+7CXkCDN3bd6/p0K3/AicCPkOJHKUz500v1D/hulCuVlggguqNc3M0LgSfOZKGvVYg2ud1GA9A==",
-      "path": "penet.asn1/2.0.1",
-      "hashPath": "penet.asn1.2.0.1.nupkg.sha512"
-    },
     "System.Diagnostics.DiagnosticSource/9.0.8": {
       "type": "package",
       "serviceable": true,
@@ -724,13 +673,6 @@
       "sha512": "sha512-n1ZP7NM2Gkn/MgD8+eOT5MulMj6wfeQMNS2Pizvq5GHCZfjlFMXV2irQlQmJhwA2VABC57M0auudO89Iu2uRLg==",
       "path": "system.diagnostics.eventlog/8.0.1",
       "hashPath": "system.diagnostics.eventlog.8.0.1.nupkg.sha512"
-    },
-    "System.Security.Cryptography.Pkcs/8.0.1": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-CoCRHFym33aUSf/NtWSVSZa99dkd0Hm7OCZUxORBjRB16LNhIEOf8THPqzIYlvKM0nNDAPTRBa1FxEECrgaxxA==",
-      "path": "system.security.cryptography.pkcs/8.0.1",
-      "hashPath": "system.security.cryptography.pkcs.8.0.1.nupkg.sha512"
     },
     "System.ServiceProcess.ServiceController/8.0.1": {
       "type": "package",

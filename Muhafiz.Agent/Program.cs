@@ -7,8 +7,10 @@ using System.IO;
 using Muhafiz.Agent;               // Worker
 using Muhafiz.Agent.Monitoring;    // CanaryWatcher
 using Muhafiz.Agent.Analysis;      // SandboxOrchestrator
+using Muhafiz.Agent.Analysis.Backends; // ISandboxBackend implementasyonları
 using Muhafiz.Agent.Response;      // EventWriter
 using Muhafiz.Agent.Pipelines;     // YaraScanner
+using Muhafiz.Agent.Security;      // SelfProtection
 using Muhafiz.Agent.Setup;
 
 // --- Enforce launch only via WPF UI ---
@@ -39,7 +41,11 @@ try
     try { File.Delete(flagPath); } catch { }
     if (!ok) { Console.Error.WriteLine("Invalid or expired UI token."); return; }
 }
-catch { return; }
+catch (Exception ex)
+{
+    Console.Error.WriteLine($"UI token validation failed: {ex.Message}");
+    return;
+}
 
 var bootstrap = EnvironmentBootstrapper.Bootstrap(AppContext.BaseDirectory);
 
@@ -63,6 +69,12 @@ builder.Services.AddSingleton<Func<EventWriter>>(sp => () => sp.GetRequiredServi
 
 // Response modülleri
 builder.Services.AddSingleton<EgressBlocker>();
+builder.Services.AddSingleton<SelfProtection>();
+
+// Sandbox backend'leri (orchestrator IEnumerable<ISandboxBackend> ile enjekte eder)
+builder.Services.AddSingleton<ISandboxBackend, WindowsSandboxBackend>();
+builder.Services.AddSingleton<ISandboxBackend, VirusTotalBackend>();
+builder.Services.AddSingleton<ISandboxBackend, HybridAnalysisBackend>();
 
 // CanaryWatcher ctor'u düz ILogger alıyorsa köprü (ILogger<CanaryWatcher> -> ILogger)
 builder.Services.AddSingleton<ILogger>(sp => sp.GetRequiredService<ILogger<CanaryWatcher>>());
@@ -83,5 +95,18 @@ builder.Services.AddHostedService<ClipboardWatcher>();
 builder.Services.AddHostedService<HoneypotWatcher>();
 
 var app = builder.Build();
+
+// Self-protection: servis kurtarma politikası + ACL sertleştirme (SelfProtection:Enabled)
+if (app.Services.GetRequiredService<IConfiguration>().GetValue<bool>("SelfProtection:Enabled"))
+{
+    try { app.Services.GetRequiredService<SelfProtection>().ApplyAll(); }
+    catch (Exception ex)
+    {
+        app.Services.GetRequiredService<ILoggerFactory>()
+           .CreateLogger("Startup")
+           .LogWarning(ex, "Self-protection uygulanamadı.");
+    }
+}
+
 await app.RunAsync();
 

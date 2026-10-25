@@ -12,17 +12,11 @@ namespace Muhafiz.Agent.Pipelines.Tests
         private const string YARA_CLI_PATH = @"C:\ProgramData\Muhafiz\yara\yara64.exe";
         private const string DUMMY_MALWARE_STRING = "MUHAFIZ_TEST_MALWARE";
 
-        [Fact]
+        [SkippableFact]
         public async Task ScanFileAsync_WhenFileContainsSignature_ReturnsHit()
         {
             // --- Arrange ---
-            if (!File.Exists(YARA_CLI_PATH))
-            {
-                // If yara isn't installed in the expected path, skip the test.
-                // This allows the test to pass in environments without a full setup.
-                // An alternative would be to fail or use a dedicated message.
-                return;
-            }
+            Skip.IfNot(File.Exists(YARA_CLI_PATH), $"YARA CLI bulunamadı: {YARA_CLI_PATH}");
 
             var tempDir = Path.Combine(Path.GetTempPath(), "MuhafizTests", Path.GetRandomFileName());
             var rulesDir = Path.Combine(tempDir, "rules");

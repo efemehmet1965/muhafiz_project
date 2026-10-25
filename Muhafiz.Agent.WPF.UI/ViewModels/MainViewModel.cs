@@ -28,15 +28,15 @@ namespace Muhafiz.Agent.WPF.UI.ViewModels
 
     public class EventEntry
     {
-        public string Id { get; set; }
+        public string Id { get; set; } = string.Empty;
         public DateTimeOffset CreatedUtc { get; set; }
-        public string[] Reasons { get; set; }
-        public string DetectionMode { get; set; }
-        public string OriginalPath { get; set; }
+        public string[] Reasons { get; set; } = Array.Empty<string>();
+        public string DetectionMode { get; set; } = string.Empty;
+        public string OriginalPath { get; set; } = string.Empty;
         public string FileName => Path.GetFileName(OriginalPath);
         public string? QuarantinePath { get; set; }
         public long Size { get; set; }
-        public string Sha256 { get; set; }
+        public string Sha256 { get; set; } = string.Empty;
         public string? CanaryToken { get; set; }
         public string? HostUrl { get; set; }
 
@@ -139,7 +139,7 @@ namespace Muhafiz.Agent.WPF.UI.ViewModels
         }
 
         [RelayCommand]
-        private async void Navigate(string panelName)
+        private async Task Navigate(string panelName)
         {
             CurrentPanelName = panelName;
             OnPropertyChanged(nameof(IsGenelPanelVisible));

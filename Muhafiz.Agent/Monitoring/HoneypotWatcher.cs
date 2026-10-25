@@ -28,7 +28,10 @@ namespace Muhafiz.Agent.Monitoring
             _eventWriterFactory = eventWriterFactory;
 
             _enabled = cfg.GetValue<bool>("Honeypot:Enabled", false);
-            _ports = cfg.GetSection("Honeypot:Ports").Get<int[]>() ?? Array.Empty<int>();
+            _ports = (cfg.GetSection("Honeypot:Ports").Get<int[]>() ?? Array.Empty<int>())
+                .Where(p => p is > 0 and <= 65535)
+                .Distinct()
+                .ToArray();
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -172,7 +175,7 @@ namespace Muhafiz.Agent.Monitoring
                     IntPtr rowPtr = IntPtr.Add(buffTable, sizeof(int));
                     for (int i = 0; i < rowCount; i++)
                     {
-                        var tcpRow = (MIB_TCPROW_OWNER_PID)Marshal.PtrToStructure(rowPtr, typeof(MIB_TCPROW_OWNER_PID));
+                        var tcpRow = (MIB_TCPROW_OWNER_PID)Marshal.PtrToStructure(rowPtr, typeof(MIB_TCPROW_OWNER_PID))!;
                         table.Add(tcpRow);
                         rowPtr = IntPtr.Add(rowPtr, Marshal.SizeOf(tcpRow));
                     }

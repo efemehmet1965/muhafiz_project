@@ -60,7 +60,7 @@ namespace Muhafiz.Agent.WPF.UI
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, "Ayarlar yüklenemedi: {ex.Message}", "Hata", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(this, $"Ayarlar yüklenemedi: {ex.Message}", "Hata", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             if (DataContext is MainViewModel vm)

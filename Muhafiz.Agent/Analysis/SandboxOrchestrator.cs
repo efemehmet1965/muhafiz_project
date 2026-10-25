@@ -54,7 +54,6 @@ namespace Muhafiz.Agent.Analysis
 
                     while (_queue.TryDequeue(out var job))
                     {
-                        // Şimdilik yalnızca log. (Gerçek submit çağrılarını ekleyeceğiz.)
                         _log.LogInformation(
                             "Sandbox kuyruğu: sha={sha} trigger={trg} q={q} backends={cnt}",
                             job.Sha256,
@@ -62,12 +61,27 @@ namespace Muhafiz.Agent.Analysis
                             job.QuarantinedPath ?? "-",
                             _backends.Count);
 
-                        // Örn. ileride:
-                        // foreach (var be in _backends)
-                        // {
-                        //     try { await be.SubmitAsync(job, _cts.Token); }
-                        //     catch (Exception ex) { _log.LogWarning(ex, "{name} submit hatası", be.Name); }
-                        // }
+                        foreach (var backend in _backends)
+                        {
+                            if (!backend.IsEnabled || !backend.CanAnalyze(job))
+                                continue;
+
+                            try
+                            {
+                                var result = await backend.AnalyzeAsync(job, _cts.Token);
+                                _log.LogInformation(
+                                    "Sandbox backend {name}: ran={ran} success={ok} report={report}",
+                                    backend.Name, result.Ran, result.Success, result.ReportPath ?? "-");
+                            }
+                            catch (OperationCanceledException) when (_cts.IsCancellationRequested)
+                            {
+                                return;
+                            }
+                            catch (Exception ex)
+                            {
+                                _log.LogWarning(ex, "Sandbox backend {name} hatası", backend.Name);
+                            }
+                        }
                     }
                 }
             }

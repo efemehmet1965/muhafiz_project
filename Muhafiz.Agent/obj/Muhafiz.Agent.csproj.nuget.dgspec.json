@@ -61,10 +61,6 @@
             "Microsoft.Extensions.Http": {
               "target": "Package",
               "version": "[9.0.8, )"
-            },
-            "PeNet": {
-              "target": "Package",
-              "version": "[5.1.0, )"
             }
           },
           "imports": [

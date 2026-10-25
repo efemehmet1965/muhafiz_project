@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Net;
+using System.Security.Principal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Muhafiz.Agent.Ioc;
@@ -15,6 +16,7 @@ public sealed class EgressBlocker
     private readonly int _ttlSeconds;
     private readonly int _maxIpsPerHost;
     private readonly int _dnsCacheSeconds;
+    private readonly bool _isElevated;
 
     // Geçici/TTL'li kurallar (ruleName → bitiş)
     private readonly Dictionary<string, DateTimeOffset> _tempRules = new();
@@ -33,6 +35,20 @@ public sealed class EgressBlocker
         _ttlSeconds = int.TryParse(cfg["Egress:RuleTtlSeconds"], out var sTtl) ? Math.Max(60, sTtl) : 1800;
         _maxIpsPerHost = int.TryParse(cfg["Egress:MaxIpsPerHost"], out var sMax) ? Math.Clamp(sMax, 1, 32) : 6;
         _dnsCacheSeconds = int.TryParse(cfg["Egress:DnsCacheSeconds"], out var sDns) ? Math.Clamp(sDns, 30, 3600) : 600;
+
+        _isElevated = IsElevated();
+        if (_applyFirewall && !_isElevated)
+            _log.LogWarning("Egress:ApplyFirewall açık ama süreç yönetici değil; netsh kuralları uygulanamayacak.");
+    }
+
+    private static bool IsElevated()
+    {
+        try
+        {
+            using var identity = WindowsIdentity.GetCurrent();
+            return new WindowsPrincipal(identity).IsInRole(WindowsBuiltInRole.Administrator);
+        }
+        catch { return false; }
     }
 
     public async Task InitializeAsync(IocStore ioc, CancellationToken ct)
@@ -208,8 +224,10 @@ public sealed class EgressBlocker
         }
     }
 
-    private static async Task<bool> RunNetshAsync(string args, CancellationToken ct)
+    private async Task<bool> RunNetshAsync(string args, CancellationToken ct)
     {
+        if (!_isElevated) return false;
+
         var psi = new ProcessStartInfo
         {
             FileName = "netsh",
@@ -218,8 +236,7 @@ public sealed class EgressBlocker
             RedirectStandardOutput = true,
             RedirectStandardError = true,
             CreateNoWindow = true,
-            WindowStyle = ProcessWindowStyle.Hidden,
-            Verb = "runas" // admin gerekebilir
+            WindowStyle = ProcessWindowStyle.Hidden
         };
 
         try
