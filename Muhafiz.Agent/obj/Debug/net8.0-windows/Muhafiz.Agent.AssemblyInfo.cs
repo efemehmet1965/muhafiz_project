@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Muhafiz.Agent")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b863b24f628f360677d4900b423544287d610922")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6ff40c420b3833dad6cf3b5b7a34eccb71e4bc4a")]
 [assembly: System.Reflection.AssemblyProductAttribute("Muhafiz.Agent")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Muhafiz.Agent")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
